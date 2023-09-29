@@ -213,7 +213,7 @@ class _SearchDialogState<T> extends State<SearchDialog> {
                             ? Radius.circular(widget.searchInputRadius!)
                             : Radius.circular(5)),
                     borderSide: const BorderSide(
-                      color: Colors.black26,
+                      color: Colors.white,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
@@ -221,7 +221,7 @@ class _SearchDialogState<T> extends State<SearchDialog> {
                         widget.searchInputRadius != null
                             ? Radius.circular(widget.searchInputRadius!)
                             : Radius.circular(5)),
-                    borderSide: const BorderSide(color: Colors.black12),
+                    borderSide: const BorderSide(color: Colors.white),
                   ),
                 ),
                 style: widget.itemStyle != null
