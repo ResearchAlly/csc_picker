@@ -516,6 +516,45 @@ const Map<CscCountry, int> Countries = {
   CscCountry.Sint_Maarten_Dutch_part: 249,
 };
 
+Future<List<dynamic>> _loadCountriesData() async {
+  final response =
+      await rootBundle.loadString('packages/csc_picker/lib/assets/country.json');
+  return jsonDecode(response) as List<dynamic>;
+}
+
+class CscPickerUtils {
+  /// Returns true if the provided country has at least one state/province.
+  static Future<bool> countryHasStates(CscCountry country) async {
+    final countries = await _loadCountriesData();
+    final countryData = countries[Countries[country]!];
+    final states = countryData['state'] as List<dynamic>?;
+    return states != null && states.isNotEmpty;
+  }
+
+  /// Returns true if [stateOrProvinceName] exists in the provided country.
+  ///
+  /// Case-insensitive by default.
+  static Future<bool> stateExistsInCountry({
+    required CscCountry country,
+    required String stateOrProvinceName,
+    bool caseSensitive = false,
+  }) async {
+    final countries = await _loadCountriesData();
+    final countryData = countries[Countries[country]!];
+    final states = countryData['state'] as List<dynamic>? ?? <dynamic>[];
+
+    final query = caseSensitive
+        ? stateOrProvinceName
+        : stateOrProvinceName.toLowerCase();
+
+    return states.any((dynamic state) {
+      final stateName = (state['name'] as String?) ?? '';
+      if (caseSensitive) return stateName == query;
+      return stateName.toLowerCase() == query;
+    });
+  }
+}
+
 class CSCPicker extends StatefulWidget {
   ///CSC Picker Constructor
   const CSCPicker({
@@ -641,9 +680,7 @@ class CSCPickerState extends State<CSCPicker> {
 
   ///Read JSON country data from assets
   Future<dynamic> getResponse() async {
-    var res = await rootBundle
-        .loadString('packages/csc_picker/lib/assets/country.json');
-    return jsonDecode(res);
+    return _loadCountriesData();
   }
 
   ///get countries from json response

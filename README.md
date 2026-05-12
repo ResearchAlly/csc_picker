@@ -38,6 +38,19 @@ To use this Package, add `csc_picker` as a [dependency in your pubspec.yaml](htt
 ```
 you will get feedback in onChanged functions
 
+### Utility helpers
+
+You can also check state/province availability without rendering `CSCPicker`:
+
+```dart
+final hasStates = await CscPickerUtils.countryHasStates(CscCountry.Canada);
+
+final ontarioExists = await CscPickerUtils.stateExistsInCountry(
+  country: CscCountry.Canada,
+  stateOrProvinceName: 'Ontario',
+);
+```
+
 ### Parameters
 
 <table>
